@@ -1,8 +1,12 @@
 package hello2.hello_spring2.service;
 
 import hello2.hello_spring2.domain.Member;
+import hello2.hello_spring2.repository.MemoryMemberRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.fail;  // JUnit5
 
 import java.util.Optional;
 
@@ -11,7 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MemberServiceTest {
 
-    MemberService memberService = new MemberService();
+    MemberService memberService;
+    MemoryMemberRepository memberRepository;
+
+    @BeforeEach
+    public void beforeEach() {
+        memberRepository = new MemoryMemberRepository();
+        memberService = new MemberService(memberRepository);
+    }
+
+    @AfterEach //초기화
+    public void afterEach() {
+        memberRepository.clearStore();
+    }
 
     @Test
     void 회원가입() {
@@ -38,17 +54,15 @@ class MemberServiceTest {
 
         //when
         memberService.join(member1);
-        try {
-            memberService.join(member2);
-        } catch (IllegalStateException e) {
+        IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
 
-        }
-    }
-    @Test
-    void findMembers() {
-    }
-
-    @Test
-    void findOne() {
+        assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+//        try {
+//            memberService.join(member2);
+//            fail();
+//        } catch (IllegalStateException e) {
+//            assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+//        }
+//    }
     }
 }
