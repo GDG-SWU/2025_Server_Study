@@ -1,8 +1,10 @@
 package gapsu.gapsu_spring.repository;
 
 import gapsu.gapsu_spring.domain.Member;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
+
 
 public class MemoryMemberRepository implements MemberRepository {
 
