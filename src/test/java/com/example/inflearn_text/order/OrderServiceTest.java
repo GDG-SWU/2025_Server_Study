@@ -1,5 +1,6 @@
 package com.example.inflearn_text.order;
 
+import com.example.inflearn_text.config.AppConfig;
 import com.example.inflearn_text.domain.Grade;
 import com.example.inflearn_text.domain.Member;
 import com.example.inflearn_text.domain.Order;
@@ -8,11 +9,20 @@ import com.example.inflearn_text.service.MemberServiceImpl;
 import com.example.inflearn_text.service.OrderService;
 import com.example.inflearn_text.service.OrderServiceImpl;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class OrderServiceTest {
-    MemberService memberService = new MemberServiceImpl();
-    OrderService orderService = new OrderServiceImpl();
+    MemberService memberService;
+    OrderService orderService;
+
+    @BeforeEach
+    public void beforeEach() {
+        AppConfig appConfig = new AppConfig();
+        memberService = appConfig.memberService();
+        orderService = appConfig.orderService();
+    }
+
     @Test
     void createOrder() {
         Long memberId = 1L;
